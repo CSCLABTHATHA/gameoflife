@@ -1,0 +1,123 @@
+import random
+import time
+XMAX = 40
+YMAX = 20
+PERCENTAGE = 10
+
+main_data = [] #in the format of [(posx,posy),alive=true/false]
+
+
+#to mess around
+def percent(chance = PERCENTAGE):
+    if random.randint(0,100) <= chance:
+        return True
+    else:
+        return False
+
+
+def showCellStat(tup):
+    for cell in main_data:
+        if cell[0] == tup:
+            return cell[1]
+        else:
+            return False
+
+        
+def createSystem(): #creates the initial system
+    global main_data
+    main_data = []
+    for j in range(1,YMAX + 1):
+        for i in range(1,XMAX + 1):
+            main_data.append([(i,j),percent()])
+
+
+
+def makeIntoCell(life):
+    if life == True:
+        return '0'
+    else:
+        return ' '
+
+
+def printer():
+    print('\n'*40)
+    fullstring = ''
+    for cell in main_data:
+        x = cell[0][0]
+        y = cell[0][1]
+        life = cell[1]
+
+        
+        
+        fullstring += makeIntoCell(life)
+        if x == XMAX:
+            fullstring += '\n'
+
+            
+    print(fullstring)
+
+
+def logic(): #position and life of cell is taken
+    #pos = cell[0]
+    #life = cell[1]
+    temp = []
+    
+    
+    def getSurrounding(tup): #returns pos of all the cells
+        x,y = tup
+        lis = []
+        for i in range(x-1,x+2):
+            for j in range(y-1,y+2):
+                lis.append((i,j))
+
+
+        del lis[4]
+        for i in lis:
+            for j in i:
+                if j < 0:
+                    lis.remove(i)
+
+        return lis
+
+
+    def checkSurrounding(lis): #checks if surrounding is alive and returns total number of alive i think but not sure check for bugs
+        count_alive = 0
+        for surround_cell in lis:
+            if showCellStat(surround_cell): #returns true if surroundcell is alive
+                count_alive += 1
+        return count_alive
+
+
+    def use_rules(around): #tells what to do based on around which is number of live cells
+        if around < 2:
+            return False
+        elif around < 4 and life:#life is true or false
+            return True
+        elif around > 3:
+            return False
+        elif around == 3:
+            return True
+    ####################################
+
+
+    global main_data
+    for cell in main_data:
+        tup = cell[0]
+        life = cell[1]
+        l = use_rules(checkSurrounding(getSurrounding(tup)))
+        life = l
+        temp.append([tup,life])
+
+    
+    main_data = temp
+    
+        
+def main():
+    createSystem()
+    while True:
+        #print(main_data)
+        printer()
+        logic()
+        time.sleep(10)
+
+main()
