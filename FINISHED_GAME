@@ -1,8 +1,9 @@
 import random
 import time
 XMAX = 40
-YMAX = 20
-PERCENTAGE = 40
+YMAX = 30
+PERCENTAGE = 35
+PAUSE = 0.25
 
 main_data = [] #in the format of [(posx,posy),alive=true/false]
 
@@ -40,7 +41,8 @@ def makeIntoCell(life):
 
 def printer():
     print('\n'*40)
-    fullstring = ''
+    print('-'*XMAX)
+    fullstring = ''#'\n'
     for cell in main_data:
         x = cell[0][0]
         y = cell[0][1]
@@ -50,10 +52,11 @@ def printer():
         
         fullstring += makeIntoCell(life)
         if x == XMAX:
-            fullstring += '\n'
+            fullstring += '|\n'
 
             
-    print(fullstring)
+    print(fullstring,end='')
+    print('-'*XMAX)
 
 
 def logic(): #position and life of cell is taken
@@ -74,7 +77,7 @@ def logic(): #position and life of cell is taken
         newlis = []
         for i in lis:
             if i[0] > 0 and i[1] > 0:
-                if i[0] <= XMAX and i[1] <= YMAX:
+                if i[0] <= XMAX and i[1] <= YMAX    :
                     newlis.append(i)
         return newlis
 
@@ -119,7 +122,7 @@ def main():
         #print(main_data)
         logic()
         #print(main_data)
-        time.sleep(0.2)
+        time.sleep(PAUSE)
         #break
 
 main()
